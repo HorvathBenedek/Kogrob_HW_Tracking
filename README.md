@@ -12,7 +12,7 @@ Ennek megfelelően a konkrét feladat
 - a megfelelő Gazebo világ elkészítése, illetve
 - azon belül a TurtleBot3 Burger robot irányítására olyan program vagy programok írása,
 - amely a környezetben felismer egy adott típusú objektumot, és
-- kifejezetten azt az objektumot képes követni, tehát távolságot tartani, 
+- kifejezetten a felismert objektumot képes követni, tehát távolságot tartani, 
 és a kamerát az objektumon tartani. 
 
 ## Megvalósítás
@@ -24,6 +24,12 @@ A telepítés feltétele természetesen a ROS és Gazebo programok használata, 
 Linux operációs rendszerhez kötöttek. Mi a programot WSL segítségével Ubuntu 20.04 alatt futtattuk,
 tehát ezt javasoljuk használatra. 
 ROS NOETIC, GAZEBO INSTALL PARANCSOK BECOPYZVA IDE
+
+Továbbá szükségünk lesz az ultralytics csomagra a YOLO algoritmushoz, amit felhasználtunk. Ezt az 
+alábbi paranccsal tudjuk telepíteni:
+```console
+!pip install ultralytics
+```
 
 ### A repo klónozása
 Lépjünk a tetszőleges Catkin Workspace-ünkbe, majd hozzunk létre egy kogrob_tracking rospy package-et.
