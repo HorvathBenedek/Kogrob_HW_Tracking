@@ -16,9 +16,9 @@ Ennek megfelelően a konkrét feladat
 és a kamerát az objektumon tartani. 
 
 ## Megvalósítás
-A program két fő osztályt használ fel, a 'Controller' és az 'ImageProcessor' osztályokat; ezek
-definíciója a megfelelő 'controller.py' és 'image_processor.py' fájlokban található, a 
-'../kogrob_tracking/src' mappában. 
+A program két fő osztályt használ fel, a `Controller` és az `ImageProcessor` osztályokat; ezek
+definíciója a megfelelő `controller.py` és `image_processor.py` fájlokban található, a 
+`../kogrob_tracking/src` mappában. 
 
 
 
