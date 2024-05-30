@@ -16,6 +16,11 @@ Ennek megfelelően a konkrét feladat
 és a kamerát az objektumon tartani. 
 
 ## Megvalósítás
+A program két fő osztályt használ fel, a 'Controller' és az 'ImageProcessor' osztályokat; ezek
+definíciója a megfelelő 'controller.py' és 'image_processor.py' fájlokban található, a 
+'../kogrob_tracking/src' mappában. 
+
+
 
 ## Telepítés
 
@@ -38,12 +43,12 @@ $ cd ~/catkin_ws/src
 $ catkin_create_pkg kogrob_tracking rospy
 ```
 Klónozzuk a jelenlegi Github repository-t!
-```console
+```bash
 git clone https://github.com/HorvathBenedek/Kogrob_HW_Tracking.git
 ```
 Majd helyezzük a tartalmát a létrehozott package-be úgy, hogy a package-en belül az
 alábbi mappaszerkezetet kapjuk:
-```console
+```bash
 $ tree
 ├── CMakeLists.txt
 ├── README.md
@@ -70,7 +75,7 @@ $ tree
 A biztonság kedvéért futtasuk a catkin_make-et. 
 
 Ezzel tulajdonképpen a program futtatásra kész. Futtatni az alábbi paranccsal tudjuk:
-```console
+```bash
 $ roslaunch kogrob_tracking kogrob_tracking.launch
 ```
 Amennyiben hibába futunk bele, tegyük futtathatóvá a .py file-okat:
@@ -79,3 +84,10 @@ $ cd ~/catkin_ws/src/kogrob_tracking/src
 $ chmod +x controller.py
 $ chmod +x image_processor.py
 ```
+<!--Illetve amennyiben szerkesztettük a .py file-okat, érdemes lefuttatni az alábbi parancsokat. 
+Ezzek a .py file-okba kerülő esetleges 
+```bash
+$ 
+$ dos2unix controller.py
+$ dos2unix image_processor.py
+```-->
