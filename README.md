@@ -18,4 +18,19 @@ Ennek megfelelően a konkrét feladat
 ## Megvalósítás
 
 ## Telepítés
-Amennyiben a trackelő 
+
+### Környezet létrehozása
+A telepítés feltétele természetesen a ROS és Gazebo programok használata, amelyek valamilyen
+Linux operációs rendszerhez kötöttek. Mi a programot WSL segítségével Ubuntu 20.04 alatt futtattuk,
+tehát ezt javasoljuk használatra. 
+ROS NOETIC, GAZEBO INSTALL PARANCSOK BECOPYZVA IDE
+
+### A repo klónozása
+Lépjünk a tetszőleges Catkin Workspace-ünkbe, majd hozzunk létre egy kogrob_tracking package-et
+
+```
+cd ~/catkin_ws/src
+catkin_create_pkg kogrob_tutorial rospy
+```
+
+
