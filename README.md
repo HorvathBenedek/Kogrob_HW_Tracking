@@ -32,7 +32,23 @@ A szimuláció a `Small_City.world` Gazebo világban fut.
     <arg name="debug" value="false"/>
   </include>
 ```
+Tartalmaz a szimuláció továbbá két TurtleBot3 irányítású modellt. Az egyik értelemszerűen a robotunk; a 
+másik egy kézzel irányítható emberfigura. Ezzel demonstrálható, hogy a program sikeresen végzi a követési
+feladatot. 
 
+```xml
+  <arg name="x_pos" default="2.245"/>
+  <arg name="y_pos" default="-1.787"/>
+  <arg name="z_pos" default="0.0"/>
+
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find kogrob_tracking)/urdf/turtlebot3_human.urdf.xacro" />
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" args="-urdf -model turtlebot3_human -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description" />
+  
+  <group ns = "follower">
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find kogrob_tracking)/urdf/turtlebot3_burger_for_autorace.urdf.xacro" />
+    <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" args="-urdf -model follower_turtlebot3_burger -x $(arg follower_x_pos) -y $(arg follower_y_pos) -z $(arg  follower_z_pos) -param /follower/robot_description" />
+  </group>
+```
 A program két fő osztályt használ fel, a `Controller` és az `ImageProcessor` osztályokat; ezek
 definíciója a megfelelő `controller.py` és `image_processor.py` fájlokban található, a 
 `../kogrob_tracking/src` mappában. 
