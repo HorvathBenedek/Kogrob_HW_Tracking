@@ -61,4 +61,15 @@ $ tree
 └── yolo
     └── yolov5nu.pt
 ```
+A biztonság kedvéért futtasuk a catkin_make-et. 
 
+Ezzel tulajdonképpen a program futtatásra kész. Futtatni az alábbi paranccsal tudjuk:
+```console
+$ roslaunch kogrob_tracking kogrob_tracking.launch
+```
+Amennyiben hibába futunk bele, tegyük futtathatóvá a .py file-okat:
+```bash
+$ cd ~/catkin_ws/src/kogrob_tracking/src
+$ chmod +x controller.py
+$ chmod +x image_processor.py
+```
