@@ -27,15 +27,15 @@ ROS NOETIC, GAZEBO INSTALL PARANCSOK BECOPYZVA IDE
 
 Továbbá szükségünk lesz az ultralytics csomagra a YOLO algoritmushoz, amit felhasználtunk. Ezt az 
 alábbi paranccsal tudjuk telepíteni:
-```console
-!pip install ultralytics
+```bash
+$ !pip install ultralytics
 ```
 
 ### A repo klónozása
 Lépjünk a tetszőleges Catkin Workspace-ünkbe, majd hozzunk létre egy kogrob_tracking rospy package-et.
-```
-cd ~/catkin_ws/src
-catkin_create_pkg kogrob_tracking rospy
+```bash
+$ cd ~/catkin_ws/src
+$ catkin_create_pkg kogrob_tracking rospy
 ```
 Klónozzuk a jelenlegi Github repository-t!
 ```console
