@@ -37,10 +37,6 @@ másik egy kézzel irányítható emberfigura. Ezzel demonstrálható, hogy a pr
 feladatot. 
 
 ```xml
-  <arg name="x_pos" default="2.245"/>
-  <arg name="y_pos" default="-1.787"/>
-  <arg name="z_pos" default="0.0"/>
-
   <param name="robot_description" command="$(find xacro)/xacro --inorder $(find kogrob_tracking)/urdf/turtlebot3_human.urdf.xacro" />
   <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" args="-urdf -model turtlebot3_human -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description" />
   
