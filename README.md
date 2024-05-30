@@ -26,11 +26,39 @@ tehát ezt javasoljuk használatra.
 ROS NOETIC, GAZEBO INSTALL PARANCSOK BECOPYZVA IDE
 
 ### A repo klónozása
-Lépjünk a tetszőleges Catkin Workspace-ünkbe, majd hozzunk létre egy kogrob_tracking package-et
-
+Lépjünk a tetszőleges Catkin Workspace-ünkbe, majd hozzunk létre egy kogrob_tracking rospy package-et.
 ```
 cd ~/catkin_ws/src
-catkin_create_pkg kogrob_tutorial rospy
+catkin_create_pkg kogrob_tracking rospy
 ```
-
+Klónozzuk a jelenlegi Github repository-t!
+```console
+git clone https://github.com/HorvathBenedek/Kogrob_HW_Tracking.git
+```
+Majd helyezzük a tartalmát a létrehozott package-be úgy, hogy a package-en belül az
+alábbi mappaszerkezetet kapjuk:
+```console
+$ tree
+├── CMakeLists.txt
+├── README.md
+├── launch
+│   └── kogrob_tracking.launch
+├── meshes
+│   └── Human.001.stl
+├── package.xml
+├── src
+│   ├── controller.py
+│   └── image_processor.py
+├── srv
+│   └── Detection.srv
+├── urdf
+│   ├── turtlebot3_burger_for_autorace.gazebo.xacro
+│   ├── turtlebot3_burger_for_autorace.urdf.xacro
+│   └── turtlebot3_human.urdf.xacro
+├── worlds
+│   ├── Small_City.world
+│   └── polyline.world
+└── yolo
+    └── yolov5nu.pt
+```
 
