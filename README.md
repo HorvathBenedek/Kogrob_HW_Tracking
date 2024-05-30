@@ -16,10 +16,28 @@ Ennek megfelelően a konkrét feladat
 és a kamerát az objektumon tartani. 
 
 ## Megvalósítás
+
+A programot a `kogrob_tracking.launch` file futtatásával indíthatjuk, ez tartalmazza a szükséges komponenseket. 
+
+### A Gazebo szimuláció felépítése
+
+A szimuláció a `Small_City.world` Gazebo világban fut.
+```xml
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find kogrob_tracking)/launch/Small_City.world"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+```
+
 A program két fő osztályt használ fel, a `Controller` és az `ImageProcessor` osztályokat; ezek
 definíciója a megfelelő `controller.py` és `image_processor.py` fájlokban található, a 
 `../kogrob_tracking/src` mappában. 
 
+A két folyamat párhuzamosan fut, mindkettő a `kogrob_tracking.launch`
 
 
 ## Telepítés
