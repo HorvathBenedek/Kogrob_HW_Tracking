@@ -45,11 +45,12 @@ feladatot.
     <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" args="-urdf -model follower_turtlebot3_burger -x $(arg follower_x_pos) -y $(arg follower_y_pos) -z $(arg  follower_z_pos) -param /follower/robot_description" />
   </group>
 ```
-A program két fő osztályt használ fel, a `Controller` és az `ImageProcessor` osztályokat; ezek
+A robot viselkedését két osztály határozza meg, a `Controller` illetve az `ImageProcessor`; ezek
 definíciója a megfelelő `controller.py` és `image_processor.py` fájlokban található, a 
 `../kogrob_tracking/src` mappában. 
-
-A két folyamat párhuzamosan fut, mindkettő a `kogrob_tracking.launch`
+Ezek a programok párhuzamosan futnak; a `Controller` felelős a robot mozgatásáért, míg az `ImageProcessor` a
+YOLOv5 algoritmus segítségével dolgozza fel a kamerából bejövő jelet. A két szálat a 
+`../kogrob_tracking/srv/Detection.srv` ROS szerver kapcsolja össze,  
 
 
 ## Telepítés
@@ -66,11 +67,11 @@ Továbbá szükségünk lesz az ultralytics csomagra a YOLO algoritmushoz, amit 
 $ pip install ultralytics
 ```
 További szükséges Python package-ek: 
-- numpy: legalább 1.2.3-as verzió
+- numpy: legalább 1.20.3-as verzió
 - opencv legalább 4.2.0
 Tehát:
 ```bash
-$ pip install numpy==4.2.0
+$ pip install numpy==1.20.3
 $ pip install opencv-python==4.2.0.34
 ```
 Itt értelemszerűen magasabb verziószámmot választani lehet. 
