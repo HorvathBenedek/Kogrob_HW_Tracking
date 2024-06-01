@@ -60,11 +60,20 @@ Linux operációs rendszerhez kötöttek. Mi a programot WSL segítségével Ubu
 tehát ezt javasoljuk használatra. 
 ROS NOETIC, GAZEBO INSTALL PARANCSOK BECOPYZVA IDE
 
-Továbbá szükségünk lesz az ultralytics csomagra a YOLO algoritmushoz, amit felhasználtunk. Ezt az 
-alábbi paranccsal tudjuk telepíteni:
+Továbbá szükségünk lesz az ultralytics csomagra a YOLO algoritmushoz, amit felhasználtunk 
+(egész pontosan YOLOv5). Ezt az alábbi paranccsal tudjuk telepíteni:
 ```bash
-$ !pip install ultralytics
+$ pip install ultralytics
 ```
+További szükséges Python package-ek: 
+- numpy: legalább 1.2.3-as verzió
+- opencv legalább 4.2.0
+Tehát:
+```bash
+$ pip install numpy==4.2.0
+$ pip install opencv-python==4.2.0.34
+```
+Itt értelemszerűen magasabb verziószámmot választani lehet. 
 
 ### A repo klónozása
 Lépjünk a tetszőleges Catkin Workspace-ünkbe, majd hozzunk létre egy kogrob_tracking rospy package-et.
