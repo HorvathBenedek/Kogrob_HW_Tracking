@@ -74,7 +74,11 @@ if __name__ == "__main__":
     image_processor = ImageProcessor()
     rospy.spin()
 ```
-Az `ImageProcessor` inicializáló függvényének felépítése:
+
+
+Az `ImageProcessor` osztály működése: 
+
+Inicializáló függvény:
 ```python
 class ImageProcessor:
     def __init__(self) -> None:
@@ -88,35 +92,66 @@ class ImageProcessor:
         ##[...]
         self.update_view()
 ```
-Itt létrehozunk egy subscriber-t `follower/camera/image` topichoz, ez veszi a robot kamerájának
-képét. A kép feldolgozását a YOLO modell fogja végezni, amit a self.model() függvénnyel hívhatunk meg.
-A `Controller` felé történő kommunikációra létrehozunk egy ropsy `Service`-t; ez tulajdonképpen
-azonos szerepet tölt be, mint egy publisher, de nem folytonos adatstreamet küld, alkalmasabb
-egyszeri üzenetekhez. 
-A `rospy.Service` üzenet-formátumát a fent említett `Detection.srv` ROS szerver határozza meg; 
-Az üzenet lebonyolítását a `human detection` függvény végzi:
+Itt 
+- létrehozunk egy subscriber-t `follower/camera/image` topichoz, ez veszi a robot kamerájának
+képét.
+- A kép feldolgozását a YOLO modell fogja végezni, amit a `self.model()` függvénnyel hívhatunk meg.
+- A `Controller` felé történő kommunikációra létrehozunk egy ropsy `Service`-t; ez tulajdonképpen
+hasonló szerepet tölt be, mint egy publisher, annyi külöbséggel, hogy nem folyamatosan küld adatot,
+hanem hívásra (request) válaszol. A `Publisher/Subscriber` paradigma alkalmasabb folytonos adatfolyam
+közvetítésére, míg a `Service/ServiceProxy` paradigma ideális alkalmankénti, egyszeri üzenetek
+közvetítésére, mivel blokkoló módban működik. 
+- végül pedig frissítjük a képet a `self.update_view()` függvénnyel. 
+
+A `rospy.Service` üzenet `Detection` formátumát a fent említett `Detection.srv` ROS szerver határozza meg:
+```python
+string label
+---
+float64 box_x
+float64 box_y
+float64 box_width
+float64 box_height
+float64 image_width
+float64 image_height
+bool in_sight_of_robot
+```
+Itt a vonal feletti rész a `ServiceProxy` irányából a `Service` felé menő request formátumaz, míg a
+vonal alatti rész a `Service` által a `ServiceProxy` felé visszaküldött válaszé. 
+Az üzenet callback függvényeét a `human detection` függvény végzi:
 
 ```python
 class ImageProcessor:
+    ##[...]
+    def human_detection(self, req):
+        self.bounding_boxes = []
+        res = DetectionResponse()
+        person_detected = False
 
-    def __init__(self) -> None:
-        self.image_msg = Image() # Image message
-        self.image_res = 240, 320, 3 # Camera resolution: height, width
-        self.image_np = np.zeros(self.image_res) # The numpy array to pour the image data into
+        for result in self.results:
+            boxes = result.boxes
+            for box in boxes:
+                cls = box.cls.item()
+                x1, y1, x2, y2 = box.xyxy[0]
+                self.bounding_boxes.append([cls, x1, y1, x2, y2])
 
-        self.camera_subscriber = rospy.Subscriber("/follower/camera/image", Image, callback=self.camera_listener)
+                # Check if the detected object is a person
+                label_box = self.model.names[cls]
+                if label_box == "person":
+                    person_detected = True
+                    res.box_x = x1
+                    res.box_y = y1
+                    res.box_width = x2 - x1
+                    res.box_height = y2 - y1
+                    res.image_width = self.image_res[1]
+                    res.image_height = self.image_res[0]
+                    res.in_sight_of_robot = True
 
-        self.model: YOLO = YOLO('../yolo/yolov5nu.pt')
-        self.results: Results = self.model(self.image_np)
-
-        self.cv2_frame_size = 400, 320
-        cv2.namedWindow("robot_view", cv2.WINDOW_NORMAL)
-        cv2.resizeWindow("robot_view", *self.cv2_frame_size)
-
-        self.human_detection_server = rospy.Service('detection', Detection, self.human_detection)
-
-
-        self.update_view()
+        # If a person is detected, return the detection response
+        if person_detected:
+            return res
+        else:
+            # If no person is detected, return response indicating not in sight
+            return DetectionResponse(in_sight_of_robot=False)
 ```
 
 A program ebben a formában kifejezetten emberi alakok detektálására van kiélezve, ezt természetesen 
@@ -126,27 +161,22 @@ A program ebben a formában kifejezetten emberi alakok detektálására van kié
 továbbá létrehozunk egy `ServiceProxy`-t - ez hasonló a subscriberhez, annyi különbséggel, hogy 
 
 
-A `Controller()` inicializáló függvényének felépítése:
+A `Controller()` osztály működése:
+Inicializáló függvény:
 ```python
 class Controller:
     def __init__(self) -> None:
         self.move = Twist()
         self.freeze = Twist()
         self.cmd_publisher = rospy.Publisher('/follower/cmd_vel', Twist, queue_size=100)
-        self.angular_error = 0
-        self.distance_error = 0
-
-        self.angular_vel_coef = 0.01
-        self.linear_vel_coef = 0.9
-        self.safe_distance = 0.3  # Desired distance from the target in meters
-
-        self.known_height_at_1m = 40.0
-
+        ##[...]
         rospy.wait_for_service('detection')
         self.detection = rospy.ServiceProxy('detection', Detection)
 ```
 Itt létrehozunk egy publisher-t `cmd_vel` topichoz, ahova `Twist` üzeneteket fogunk küldeni;
 továbbá létrehozunk egy `ServiceProxy`-t - ez hasonló a subscriberhez, annyi különbséggel, hogy 
+
+
 
 ## Telepítés
 
