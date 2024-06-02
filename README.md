@@ -147,16 +147,17 @@ képét.
 - végül pedig frissítjük a képet a `self.update_view()` függvénnyel; itt egy `rospy.Sunscriber`
 segítésével vesszük a kamera adatait. 
 
-**A `rospy.Service()` és `rospy.ServiceProxy()` paradigma magyarázata:**
-Lényegében a `Service/ServiceProxy` pár ugyanazt a feladatot tölti be, mint a `Publisher/Subscriber` 
-pár, de megvalósításban és felhasználási területben eltérnek. 
-A `Publisher/Subscriber` node-ok folyamatosan küldenek és vesznek adatot, míg a `Service/ServiceProxy`
-node-ok esetén e `Service` ("adó", kb. kiszolgáló) a `ServiceProxy` ("vevő", vagy kliens) kérése nyomán 
-közvetít egy üzenetet a `Service`. Ezenfelül a `Service/ServiceProxy` kommunikációs pár blokkoló módban működik. 
-Minden azt jelenti, hogy a `Publisher/Subscriber` paradigma alkalmasabb folytonos adatfolyam
-közvetítésére visszaigazolás nélkül; míg a `Service/ServiceProxy` paradigma ideális háttérben futó 
-másodlagos számítások lekérdezéséhez; szinkron jellegéből adódóan jobban ütemezhető hosszabb számítási igényű 
-feladatok ellátására. 
+  **A `rospy.Service()` és `rospy.ServiceProxy()` paradigma magyarázata:**
+  
+  Lényegében a `Service/ServiceProxy` pár ugyanazt a feladatot tölti be, mint a `Publisher/Subscriber` 
+  pár, de megvalósításban és felhasználási területben eltérnek. 
+  A `Publisher/Subscriber` node-ok folyamatosan küldenek és vesznek adatot, míg a `Service/ServiceProxy`
+  node-ok esetén e `Service` ("adó", kb. kiszolgáló) a `ServiceProxy` ("vevő", vagy kliens) kérése nyomán 
+  közvetít egy üzenetet a `Service`. Ezenfelül a `Service/ServiceProxy` kommunikációs pár blokkoló módban működik. 
+  Minden azt jelenti, hogy a `Publisher/Subscriber` paradigma alkalmasabb folytonos adatfolyam
+  közvetítésére visszaigazolás nélkül; míg a `Service/ServiceProxy` paradigma ideális háttérben futó 
+  másodlagos számítások lekérdezéséhez; szinkron jellegéből adódóan jobban ütemezhető hosszabb számítási igényű 
+  feladatok ellátására. 
 
 néhány fontos különbséggel. 
 Egyrészt a `Publisher/Subscriber` node-ok folyamatosan küldenek és vesznek adatot, míg a `Service/ServiceProxy`
