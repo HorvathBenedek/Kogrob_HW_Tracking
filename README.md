@@ -50,7 +50,10 @@ definíciója a megfelelő `controller.py` és `image_processor.py` fájlokban t
 `../kogrob_tracking/src` mappában. 
 Ezek a programok párhuzamosan futnak; a `Controller` felelős a robot mozgatásáért, míg az `ImageProcessor` a
 YOLOv5 algoritmus segítségével dolgozza fel a kamerából bejövő jelet. A két szálat a 
-`../kogrob_tracking/srv/Detection.srv` ROS szerver kapcsolja össze,  
+`../kogrob_tracking/srv/Detection.srv` ROS szerver kapcsolja össze, ez tartalmazza a ROS
+node-ok közötti üzenetek formátumát. 
+
+#### A robot viselkedésének rövid áttekintése
 
 
 ## Telepítés
