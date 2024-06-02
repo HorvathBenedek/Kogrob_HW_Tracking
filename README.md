@@ -53,8 +53,24 @@ YOLOv5 algoritmus segítségével dolgozza fel a kamerából bejövő jelet. A k
 `../kogrob_tracking/srv/Detection.srv` ROS szerver kapcsolja össze, ez tartalmazza a ROS
 node-ok közötti üzenetek formátumát. 
 
-#### A robot viselkedésének rövid áttekintése
+### A robot viselkedésének rövid áttekintése
 
+A rospy node-ok és az osztályok inicializálása után a osztályt a `run()` függvénnyel indíthatjuk el 
+az osztályok működését 
+```python
+##controller.py
+if __name__ == "__main__":
+    rospy.init_node("controller", anonymous=True)
+    controller = Controller()
+    controller.run()
+
+##image_processor.py
+if __name__ == "__main__":
+    rospy.init_node("image_processor", anonymous=True)
+    rospy.on_shutdown(cv2.destroyAllWindows)
+    image_processor = ImageProcessor()
+    rospy.spin()
+```
 
 ## Telepítés
 
