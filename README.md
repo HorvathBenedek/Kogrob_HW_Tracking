@@ -84,8 +84,9 @@ forgási sebességeket.
 _Megjegyzés: A robot működését vezérlő kód bemutatásánál a lényegretörőség érdekében csak a fontosabb részleteket emelnénk 
 ki. A kivágott kódrészletek helyét `##[...]` komment jelöli._
 
-A rospy node-ok és az osztályok inicializálása után a osztályt a `run()` függvénnyel indíthatjuk el 
-az osztályok működését 
+A rospy node-ok és az osztályok inicializálása után a osztályt a `Controller.run()` függvénnyel indíthatjuk el 
+az osztályok együttes működését. Az  `ImageProcessor` osztálynak nincs `run()` függvénye, annak vezérlését a 
+`Controller` végzi. 
 ```python
 ##controller.py
 if __name__ == "__main__":
@@ -101,6 +102,25 @@ if __name__ == "__main__":
     rospy.spin()
 ```
 
+A `Controller()` osztály működése:
+Inicializáló függvény:
+```python
+class Controller:
+    def __init__(self) -> None:
+        self.move = Twist()
+        self.freeze = Twist()
+        self.cmd_publisher = rospy.Publisher('/follower/cmd_vel', Twist, queue_size=100)
+        ##[...]
+        rospy.wait_for_service('detection')
+        self.detection = rospy.ServiceProxy('detection', Detection)
+```
+Itt 
+- létrehozunk egy publisher-t `cmd_vel` topichoz, ahova `Twist` üzeneteket fogunk küldeni, ezzel 
+irányítjuk a robotot.
+- Várunk an `ImageProcessor` osztályra, hogy létrehozzon egy `rospy.Service` kiszolgálót. Err 
+- Továbbá létrehozunk egy `ServiceProxy`-t.
+
+A  `rospy.Service` és  `rospy.ServiceProxy` használatáról lejjebb lesz szó. 
 
 Az `ImageProcessor` osztály működése: 
 
@@ -122,13 +142,16 @@ Itt
 - létrehozunk egy subscriber-t `follower/camera/image` topichoz, ez veszi a robot kamerájának
 képét.
 - A kép feldolgozását a YOLO modell fogja végezni, amit a `self.model()` függvénnyel hívhatunk meg.
-- A `Controller` felé történő kommunikációra létrehozunk egy ropsy `Service`-t; ez tulajdonképpen
+- A `Controller` felé történő kommunikációra létrehozunk egy ropsy `Service`-t; ez fogja kiszolgálni a
+`Controller` kérésseit. 
+- végül pedig frissítjük a képet a `self.update_view()` függvénnyel; itt egy `rospy.Sunscriber`
+segítésével vesszük a kamera adatait. 
+
+ez tulajdonképpen
 hasonló szerepet tölt be, mint egy publisher, annyi külöbséggel, hogy nem folyamatosan küld adatot,
 hanem hívásra (request) válaszol. A `Publisher/Subscriber` paradigma alkalmasabb folytonos adatfolyam
 közvetítésére, míg a `Service/ServiceProxy` paradigma ideális alkalmankénti, egyszeri üzenetek
 közvetítésére, mivel blokkoló módban működik. 
-- végül pedig frissítjük a képet a `self.update_view()` függvénnyel. 
-
 A `rospy.Service` üzenet `Detection` formátumát a fent említett `Detection.srv` ROS szerver határozza meg:
 ```python
 string label
@@ -141,7 +164,7 @@ float64 image_width
 float64 image_height
 bool in_sight_of_robot
 ```
-Itt a vonal feletti rész a `ServiceProxy` irányából a `Service` felé menő request formátumaz, míg a
+Itt a vonal feletti rész a `ServiceProxy` irányából a `Service` felé menő request formátuma, míg a
 vonal alatti rész a `Service` által a `ServiceProxy` felé visszaküldött válaszé. 
 Az üzenet callback függvényeét a `human detection` függvény végzi:
 
@@ -184,22 +207,6 @@ A program ebben a formában kifejezetten emberi alakok detektálására van kié
 át lehet írni bármely a YOLOv5 által detektálni képes kategóriára minimális erőbefektetéssel.
 
 
-továbbá létrehozunk egy `ServiceProxy`-t - ez hasonló a subscriberhez, annyi különbséggel, hogy 
-
-
-A `Controller()` osztály működése:
-Inicializáló függvény:
-```python
-class Controller:
-    def __init__(self) -> None:
-        self.move = Twist()
-        self.freeze = Twist()
-        self.cmd_publisher = rospy.Publisher('/follower/cmd_vel', Twist, queue_size=100)
-        ##[...]
-        rospy.wait_for_service('detection')
-        self.detection = rospy.ServiceProxy('detection', Detection)
-```
-Itt létrehozunk egy publisher-t `cmd_vel` topichoz, ahova `Twist` üzeneteket fogunk küldeni;
 továbbá létrehozunk egy `ServiceProxy`-t - ez hasonló a subscriberhez, annyi különbséggel, hogy 
 
 
