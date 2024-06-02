@@ -55,6 +55,9 @@ node-ok közötti üzenetek formátumát.
 
 ### A robot viselkedésének rövid áttekintése
 
+__Megjegyzés: A robot működését vezérlő kód bemutatásánál a lényegretörőség érdekében csak a fontosabb részleteket emelnénk 
+ki. A kivágott kódrészletek helyét `##[...]` komment jelöli.__
+
 A rospy node-ok és az osztályok inicializálása után a osztályt a `run()` függvénnyel indíthatjuk el 
 az osztályok működését 
 ```python
@@ -71,6 +74,88 @@ if __name__ == "__main__":
     image_processor = ImageProcessor()
     rospy.spin()
 ```
+Az `ImageProcessor` inicializáló függvényének felépítése:
+```python
+class ImageProcessor:
+
+    def __init__(self) -> None:
+        self.image_msg = Image() # Image message
+        self.image_res = 240, 320, 3 # Camera resolution: height, width
+        self.image_np = np.zeros(self.image_res) # The numpy array to pour the image data into
+
+        self.camera_subscriber = rospy.Subscriber("/follower/camera/image", Image, callback=self.camera_listener)
+
+        self.model: YOLO = YOLO('../yolo/yolov5nu.pt')
+        self.results: Results = self.model(self.image_np)
+
+        self.cv2_frame_size = 400, 320
+        cv2.namedWindow("robot_view", cv2.WINDOW_NORMAL)
+        cv2.resizeWindow("robot_view", *self.cv2_frame_size)
+
+        self.human_detection_server = rospy.Service('detection', Detection, self.human_detection)
+        self.bounding_boxes = []
+
+        self.update_view()
+```
+Itt létrehozunk egy subscriber-t `follower/camera/image` topichoz, ez veszi a robot kamerájának
+képét. A kép feldolgozását a YOLO modell fogja végezni, amit a self.model() függvénnyel hívhatunk meg.
+A `Controller` felé történő kommunikációra létrehozunk egy ropsy `Service`-t; ez tulajdonképpen
+azonos szerepet tölt be, mint egy publisher, de nem folytonos adatstreamet küld, alkalmasabb
+egyszeri üzenetekhez. 
+A `rospy.Service` üzenet-formátumát a fent említett `Detection.srv` ROS szerver határozza meg; 
+Az üzenet lebonyolítását a `human detection` függvény végzi:
+
+```python
+class ImageProcessor:
+
+    def __init__(self) -> None:
+        self.image_msg = Image() # Image message
+        self.image_res = 240, 320, 3 # Camera resolution: height, width
+        self.image_np = np.zeros(self.image_res) # The numpy array to pour the image data into
+
+        self.camera_subscriber = rospy.Subscriber("/follower/camera/image", Image, callback=self.camera_listener)
+
+        self.model: YOLO = YOLO('../yolo/yolov5nu.pt')
+        self.results: Results = self.model(self.image_np)
+
+        self.cv2_frame_size = 400, 320
+        cv2.namedWindow("robot_view", cv2.WINDOW_NORMAL)
+        cv2.resizeWindow("robot_view", *self.cv2_frame_size)
+
+        self.human_detection_server = rospy.Service('detection', Detection, self.human_detection)
+        self.bounding_boxes = []
+
+        self.update_view()
+```
+
+A program ebben a formában kifejezetten emberi alakok detektálására van kiélezve, ezt természetesen 
+át lehet írni bármely a YOLOv5 által detektálni képes kategóriára minimális erőbefektetéssel.
+
+
+továbbá létrehozunk egy `ServiceProxy`-t - ez hasonló a subscriberhez, annyi különbséggel, hogy 
+
+
+A `Controller()` inicializáló függvényének felépítése:
+```python
+class Controller:
+    def __init__(self) -> None:
+        self.move = Twist()
+        self.freeze = Twist()
+        self.cmd_publisher = rospy.Publisher('/follower/cmd_vel', Twist, queue_size=100)
+        self.angular_error = 0
+        self.distance_error = 0
+
+        self.angular_vel_coef = 0.01
+        self.linear_vel_coef = 0.9
+        self.safe_distance = 0.3  # Desired distance from the target in meters
+
+        self.known_height_at_1m = 40.0
+
+        rospy.wait_for_service('detection')
+        self.detection = rospy.ServiceProxy('detection', Detection)
+```
+Itt létrehozunk egy publisher-t `cmd_vel` topichoz, ahova `Twist` üzeneteket fogunk küldeni;
+továbbá létrehozunk egy `ServiceProxy`-t - ez hasonló a subscriberhez, annyi különbséggel, hogy 
 
 ## Telepítés
 
