@@ -55,8 +55,8 @@ node-ok közötti üzenetek formátumát.
 
 ### A robot viselkedésének rövid áttekintése
 
-__Megjegyzés: A robot működését vezérlő kód bemutatásánál a lényegretörőség érdekében csak a fontosabb részleteket emelnénk 
-ki. A kivágott kódrészletek helyét `##[...]` komment jelöli.__
+_Megjegyzés: A robot működését vezérlő kód bemutatásánál a lényegretörőség érdekében csak a fontosabb részleteket emelnénk 
+ki. A kivágott kódrészletek helyét `##[...]` komment jelöli._
 
 A rospy node-ok és az osztályok inicializálása után a osztályt a `run()` függvénnyel indíthatjuk el 
 az osztályok működését 
@@ -77,24 +77,15 @@ if __name__ == "__main__":
 Az `ImageProcessor` inicializáló függvényének felépítése:
 ```python
 class ImageProcessor:
-
     def __init__(self) -> None:
         self.image_msg = Image() # Image message
-        self.image_res = 240, 320, 3 # Camera resolution: height, width
-        self.image_np = np.zeros(self.image_res) # The numpy array to pour the image data into
-
+        ##[...]
         self.camera_subscriber = rospy.Subscriber("/follower/camera/image", Image, callback=self.camera_listener)
-
         self.model: YOLO = YOLO('../yolo/yolov5nu.pt')
         self.results: Results = self.model(self.image_np)
-
-        self.cv2_frame_size = 400, 320
-        cv2.namedWindow("robot_view", cv2.WINDOW_NORMAL)
-        cv2.resizeWindow("robot_view", *self.cv2_frame_size)
-
+        ##[...]
         self.human_detection_server = rospy.Service('detection', Detection, self.human_detection)
-        self.bounding_boxes = []
-
+        ##[...]
         self.update_view()
 ```
 Itt létrehozunk egy subscriber-t `follower/camera/image` topichoz, ez veszi a robot kamerájának
@@ -123,7 +114,7 @@ class ImageProcessor:
         cv2.resizeWindow("robot_view", *self.cv2_frame_size)
 
         self.human_detection_server = rospy.Service('detection', Detection, self.human_detection)
-        self.bounding_boxes = []
+
 
         self.update_view()
 ```
