@@ -45,15 +45,40 @@ feladatot.
     <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" args="-urdf -model follower_turtlebot3_burger -x $(arg follower_x_pos) -y $(arg follower_y_pos) -z $(arg  follower_z_pos) -param /follower/robot_description" />
   </group>
 ```
-A robot viselkedését két osztály határozza meg, a `Controller` illetve az `ImageProcessor`; ezek
-definíciója a megfelelő `controller.py` és `image_processor.py` fájlokban található, a 
-`../kogrob_tracking/src` mappában. 
+A robot viselkedését a `controller.py` és `image_processor.py` kódok határozzák meg, melyik
+a `../kogrob_tracking/src` mappában találhatók. 
+
+
 Ezek a programok párhuzamosan futnak; a `Controller` felelős a robot mozgatásáért, míg az `ImageProcessor` a
 YOLOv5 algoritmus segítségével dolgozza fel a kamerából bejövő jelet. A két szálat a 
 `../kogrob_tracking/srv/Detection.srv` ROS szerver kapcsolja össze, ez tartalmazza a ROS
 node-ok közötti üzenetek formátumát. 
 
-### A robot viselkedésének rövid áttekintése
+<!--A robot viselkedését két osztály határozza meg, a `Controller` illetve az `ImageProcessor`; ezek
+definíciója a megfelelő `controller.py` és `image_processor.py` fájlokban található, a 
+`../kogrob_tracking/src` mappában. 
+Ezek a programok párhuzamosan futnak; a `Controller` felelős a robot mozgatásáért, míg az `ImageProcessor` a
+YOLOv5 algoritmus segítségével dolgozza fel a kamerából bejövő jelet. A két szálat a 
+`../kogrob_tracking/srv/Detection.srv` ROS szerver kapcsolja össze, ez tartalmazza a ROS
+node-ok közötti üzenetek formátumát. -->
+
+### A robot viselkedésének áttekintése
+
+A robot viselkedését az alábbi gráffal lehet szemléltetni
+
+GRÁF!
+
+Lényegében a robot viselkedése két szálon fut - a fent említett `controller.py` és `image_processor.py`
+fájlokban definiált `Controller` és `ImageProcessor` osztályok. 
+- Az `ImageProcessor` a Gazebo szimuláció kamera objektumának képét veszi, ezt eltárolja a `self.image_np`-ben
+- Eközben a `Controller` érzékelési request-et küld az `ImageProcessor`-nak.
+- Az `ImageProcessor` a requestet feldolgozandó az eltárolt kameraképet beküldi a YOLOv5 neurális hálós
+szegmentálási és osztályozási algoritmusba. 
+- Az `ImageProcessor` visszaküldi a beazonosított objektumok közül a legvalószínűbb helyét és méretét.
+- A `Controller` ennek megfelelően igazítja a sebességét és szögsebességét
+- Végül pedig a `Controller` a Gazebo szimulációnak `Twist` üzenet formájában elküldi az elvárt mozgási és 
+forgási sebességeket. 
+
 
 _Megjegyzés: A robot működését vezérlő kód bemutatásánál a lényegretörőség érdekében csak a fontosabb részleteket emelnénk 
 ki. A kivágott kódrészletek helyét `##[...]` komment jelöli._
