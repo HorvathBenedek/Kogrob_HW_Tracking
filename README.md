@@ -114,7 +114,7 @@ class Controller:
         rospy.wait_for_service('detection')
         self.detection = rospy.ServiceProxy('detection', Detection)
 ```
-Itt 
+Itt a főbb lépések
 - létrehozunk egy publisher-t `cmd_vel` topichoz, ahova `Twist` üzeneteket fogunk küldeni, ezzel 
 irányítjuk a robotot.
 - Várunk an `ImageProcessor` osztályra, hogy létrehozzon egy `rospy.Service` kiszolgálót. Err 
@@ -138,7 +138,7 @@ class ImageProcessor:
         ##[...]
         self.update_view()
 ```
-Itt 
+**Itt a főbb lépések**
 - létrehozunk egy subscriber-t `follower/camera/image` topichoz, ez veszi a robot kamerájának
 képét.
 - A kép feldolgozását a YOLO modell fogja végezni, amit a `self.model()` függvénnyel hívhatunk meg.
@@ -147,11 +147,25 @@ képét.
 - végül pedig frissítjük a képet a `self.update_view()` függvénnyel; itt egy `rospy.Sunscriber`
 segítésével vesszük a kamera adatait. 
 
-ez tulajdonképpen
+**A `rospy.Service()` és `rospy.ServiceProxy()` paradigma magyarázata:**
+Lényegében a `Service/ServiceProxy` pár ugyanazt a feladatot tölti be, mint a `Publisher/Subscriber` 
+pár, de megvalósításban és felhasználási területben eltérnek. 
+A `Publisher/Subscriber` node-ok folyamatosan küldenek és vesznek adatot, míg a `Service/ServiceProxy`
+node-ok esetén e `Service` ("adó", kb. kiszolgáló) a `ServiceProxy` ("vevő", vagy kliens) kérése nyomán 
+közvetít egy üzenetet a `Service`. Ezenfelül a `Service/ServiceProxy` kommunikációs pár blokkoló módban működik. 
+Minden azt jelenti, hogy a `Publisher/Subscriber` paradigma alkalmasabb folytonos adatfolyam
+közvetítésére visszaigazolás nélkül; míg a `Service/ServiceProxy` paradigma ideális háttérben futó 
+másodlagos számítások lekérdezéséhez; szinkron jellegéből adódóan jobban ütemezhető hosszabb számítási igényű 
+feladatok ellátására. 
+
+néhány fontos különbséggel. 
+Egyrészt a `Publisher/Subscriber` node-ok folyamatosan küldenek és vesznek adatot, míg a `Service/ServiceProxy`
+node-ok esetén egy-egy üzenet érkezik csak. Ennél foa "vevő" - a `ServiceProxy` - kérése nyomán közvetít egy üzenetet a `Service`. 
+<!--ez tulajdonképpen
 hasonló szerepet tölt be, mint egy publisher, annyi külöbséggel, hogy nem folyamatosan küld adatot,
 hanem hívásra (request) válaszol. A `Publisher/Subscriber` paradigma alkalmasabb folytonos adatfolyam
 közvetítésére, míg a `Service/ServiceProxy` paradigma ideális alkalmankénti, egyszeri üzenetek
-közvetítésére, mivel blokkoló módban működik. 
+közvetítésére, mivel blokkoló módban működik. -->
 A `rospy.Service` üzenet `Detection` formátumát a fent említett `Detection.srv` ROS szerver határozza meg:
 ```python
 string label
