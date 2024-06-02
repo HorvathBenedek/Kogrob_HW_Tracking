@@ -147,9 +147,8 @@ képét.
 - végül pedig frissítjük a képet a `self.update_view()` függvénnyel; itt egy `rospy.Sunscriber`
 segítésével vesszük a kamera adatait. 
 
-> [!**A `rospy.Service()` és `rospy.ServiceProxy()` paradigma magyarázata:**]
+> [!TIP]
 > **A `rospy.Service()` és `rospy.ServiceProxy()` paradigma magyarázata:**
-  
 > Lényegében a `Service/ServiceProxy` pár ugyanazt a feladatot tölti be, mint a `Publisher/Subscriber` 
 > pár, de megvalósításban és felhasználási területben eltérnek. 
 > A `Publisher/Subscriber` node-ok folyamatosan küldenek és vesznek adatot, míg a `Service/ServiceProxy`
