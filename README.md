@@ -79,6 +79,7 @@ szegmentálási és osztályozási algoritmusba.
 - Végül pedig a `Controller` a Gazebo szimulációnak `Twist` üzenet formájában elküldi az elvárt mozgási és 
 forgási sebességeket. 
 
+### A kód magyarázata
 
 _Megjegyzés: A robot működését vezérlő kód bemutatásánál a lényegretörőség érdekében csak a fontosabb részleteket emelnénk 
 ki. A kivágott kódrészletek helyét `##[...]` komment jelöli._
