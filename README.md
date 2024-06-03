@@ -256,7 +256,8 @@ Gyakorlatban ez az alábbi módon néz ki.
 <!--![img1](./media/screenshot.png)-->
 <img src="./media/screenshot.png" width="800">
 **`Controller.run()`**
-```
+
+```python
 class Controller:
     ##[...]
     def run(self) -> None:
@@ -286,6 +287,7 @@ class Controller:
         except rospy.exceptions.ROSInterruptException:
             pass
 ```
+
 Ennek a függvénynek két fő funkciója van.
 - Egyrészt, mint az már említésre került, kikéri a YOLOv5 modell által detektált objektumok közül a
 keresettet (a `ImageProcessor.human_detection()` függvény visszatérési értékét). 
