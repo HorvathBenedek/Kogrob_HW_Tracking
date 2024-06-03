@@ -3,6 +3,10 @@
 # Kognitív robotika 
 ## Object Tracking házi feladat - 2024 tavasz
 
+<video controls>
+  <source src="./media/NVIDIA_Overlay_W6DkVaR8zW.mp4" type="video/mp4">
+</video>
+
 ## A feladat leírása
 A választott feladatunk témája emberek vagy tárgyak felismerése és követése klasszikus
 vagy neurális hálós algoritmusos képfeldolgozás segítségével TurtleBot3 Burger roboton, 
@@ -296,7 +300,6 @@ logika alapján épül fel:
        Z tengely menti (vízszintes síkú) forgási szögsebességet.
           * Ha van célpont, ω<sub>Z</sub> és v<sub>X</sub> egy-egy P szabályzóval közelít a nyugalmi pont felé. 
           * Ha nincs célpont, a sebesség 0, a robot forog és keres.
-
 
 **`ImageProcessor.human_detection()`**
 ```python
