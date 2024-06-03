@@ -279,12 +279,21 @@ class Controller:
 Ennek a függvénynek két fő funkciója van.
 - Egyrészt, mint az már említésre került, kikéri a YOLOv5 modell által detektált objektumok közül a
 keresettet (a `ImageProcessor.human_detection()` függvény visszatérési értékét). 
-- Másrészt szabályozza a mozgási és forgási sebességet a kapott adatok alapján. A szabályozóalgoritmus az alábbi
+- Másrészt szabályozza a mozgási és forgási sebességet a kapott adatok alapján. A szabályozóalgoritmus 
+feladata a kamera középvonalának rajtatartása a trackelt objektumon, továbbá az ideális távolság
+megtartása az objektumtól, hiszen ha túl közel vagy távol kerül, a YOLO feldolgoza romlik. Az algoritmus az alábbi
 logika alapján épül fel:
     1. A `Controller.find_error()` függvény segítségével a szabályozó szöghibájának kiszámítása a 
         kép ismert mérete és a detektált objektum határoló téglalapjának (dobozának) paramétereiból. Lényegében 
-        a szöghiba értéke szöghiba = irány * |X_<sub>doboz</sub> - X_<sub>kép</sub>|, és irány ∈ {-1, 1}
-    2. A távolság becslése az 
+        a szöghiba értéke szöghiba = irány * |X<sub>doboz</sub> - X<sub>kép</sub>|, és irány ∈ {-1, 1}
+    2. A távolság becslése az objektum látszólagos mérete alapján, és távolsági hiba számítása. A méret 
+       becslése arányosításon alapul, szükséges hozzá az objektum hozzávetőleges mérete 1 méter távolságban.
+       Ha a becslés megvan, kivonjuk belőle a biztonságos minimum követési távolságot. 
+    3. A távolság és a szöghiba ismeretében meghatározzuk az X irányú (előre mutató sebességet és a
+       Z tengely menti (vízszintes síkú) forgási szögsebességet.
+           * Ha van célpont, ω<sub>Z</sub> és v<sub>X</sub> egy-egy P szabályzóval közelít a nyugalmi pont felé. 
+           * Ha nincs célpont, a sebesség 0, a robot forog és keres. 
+        
 
 **`ImageProcessor.human_detection()`**
 ```python
