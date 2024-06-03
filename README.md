@@ -15,7 +15,8 @@
 
 ## Tartalomjegyzék
 1. [A feladat leírása](##A_feladat_leírása)  
-
+2. [Megvalósítás](##Megvalósítás)
+3. [Telepítés](##Telepítés)   
 
 ## A feladat leírása
 A választott feladatunk témája emberek vagy tárgyak felismerése és követése klasszikus
