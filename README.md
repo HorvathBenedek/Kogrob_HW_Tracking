@@ -13,6 +13,10 @@
 
 <!--<video src="https://github.com/HorvathBenedek/Kogrob_HW_Tracking/tree/main/media/NVIDIA_Overlay_W6DkVaR8zW.mp4" width="800" />-->
 
+## Tartalomjegyzék
+1. [A feladat leírása](##A_feladat_leírása)  
+
+
 ## A feladat leírása
 A választott feladatunk témája emberek vagy tárgyak felismerése és követése klasszikus
 vagy neurális hálós algoritmusos képfeldolgozás segítségével TurtleBot3 Burger roboton, 
@@ -352,9 +356,9 @@ A program ebben a formában kifejezetten emberi alakok detektálására van kié
 ### Környezet létrehozása
 A telepítés feltétele természetesen a ROS és Gazebo programok használata, amelyek valamilyen
 Linux operációs rendszerhez kötöttek. Mi a programot WSL segítségével Ubuntu 20.04 alatt futtattuk,
-tehát ezt javasoljuk használatra. A ROS Noetic telepítéséhez részletes leírást találni [itt] (https://wiki.ros.org/noetic/Installation/Ubuntu)
+tehát ezt javasoljuk használatra. A ROS Noetic telepítéséhez részletes leírást találni [itt](https://wiki.ros.org/noetic/Installation/Ubuntu)
 
-Továbbá szükségünk lesz az ultralytics csomagra a YOLO algoritmushoz, amit felhasználtunk 
+Szükségünk lesz az ultralytics csomagra a YOLO algoritmushoz, amit felhasználtunk 
 (egész pontosan YOLOv5). Ezt az alábbi paranccsal tudjuk telepíteni:
 ```bash
 $ pip install ultralytics
