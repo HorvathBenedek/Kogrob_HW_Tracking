@@ -244,7 +244,7 @@ Látható, hogy az `update_view()` feladata
 Gyakorlatban ez az alábbi módon néz ki. 
 
 SCREENSHOT!!!
-![alt text](./media/screenshot.png)
+![alt text](./media/screenshot.png | width=100)
 
 **`Controller.run()`**
 ```
