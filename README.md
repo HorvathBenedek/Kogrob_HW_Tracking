@@ -237,9 +237,10 @@ class ImageProcessor:
         except rospy.exceptions.ROSInterruptException:
             pass
 ```
-Látható, hogy az `update_view()` feladata a kamera képének beolvasása, annak betáplálása a YOLOv5 neurális 
-hálóba - `self.model(self.image_np)`, majd a kép ábrázolása a neurális háló által visszatérített 
-hatázolónégyzetekkel és kategóriákkal együtt. 
+Látható, hogy az `update_view()` feladata 
+- a kamera képének beolvasása,
+- annak betáplálása a YOLOv5 neurális hálóba - `self.model(self.image_np)`, majd
+- a kép ábrázolása a neurális háló által visszatérített hatázolónégyzetekkel és kategóriákkal együtt. 
 Gyakorlatban ez az alábbi módon néz ki. 
 
 SCREENSHOT!!!
@@ -275,7 +276,15 @@ class Controller:
         except rospy.exceptions.ROSInterruptException:
             pass
 ```
-Ennek a függvénynek két fő funkciója van; egyrészt, mint az már említésre került, 
+Ennek a függvénynek két fő funkciója van.
+- Egyrészt, mint az már említésre került, kikéri a YOLOv5 modell által detektált objektumok közül a
+keresettet (a `ImageProcessor.human_detection()` függvény visszatérési értékét). 
+- Másrészt szabályozza a mozgási és forgási sebességet a kapott adatok alapján. A szabályozóalgoritmus az alábbi
+logika alapján épül fel:
+    1. A `Controller.find_error()` függvény segítségével a szabályozó szöghibájának kiszámítása a 
+        kép ismert mérete és a detektált objektum határoló téglalapjának (dobozának) paramétereiból. Lényegében 
+        a szöghiba értéke szöghiba = irány * |X_<sub>doboz</sub> - X_<sub>kép</sub>|, és irány ∈ {-1, 1}
+    2. A távolság becslése az 
 
 **`ImageProcessor.human_detection()`**
 ```python
