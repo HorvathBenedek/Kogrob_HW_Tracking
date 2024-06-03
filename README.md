@@ -64,8 +64,7 @@ YOLOv5 algoritmus segítségével dolgozza fel a kamerából bejövő jelet.
 
 A robot viselkedését az alábbi gráffal lehet szemléltetni
 
-![img1](./media/Diagram3.drawio.svg)
-<img src="./media/Diagram3.drawio.svg" width="500">
+<img src="./media/Diagram3.drawio.svg" width="800">
 
 Lényegében a robot viselkedése két szálon fut - a fent említett `controller.py` és `image_processor.py`
 fájlokban definiált `Controller` és `ImageProcessor` osztályok. 
@@ -252,8 +251,8 @@ Látható, hogy az `update_view()` feladata
 - a kép ábrázolása a neurális háló által visszatérített hatázolónégyzetekkel és kategóriákkal együtt. 
 Gyakorlatban ez az alábbi módon néz ki. 
 
-![img1](./media/screenshot.png)
-<img src="./media/screenshot.png" width="500">
+<!--![img1](./media/screenshot.png)-->
+<img src="./media/screenshot.png" width="800">
 **`Controller.run()`**
 ```
 class Controller:
