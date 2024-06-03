@@ -9,6 +9,8 @@
   <source src="./media/NVIDIA_Overlay_W6DkVaR8zW.mp4" type="video/mp4">
 </video>
 
+
+
 ## A feladat leírása
 A választott feladatunk témája emberek vagy tárgyak felismerése és követése klasszikus
 vagy neurális hálós algoritmusos képfeldolgozás segítségével TurtleBot3 Burger roboton, 
