@@ -3,7 +3,7 @@
 # Kognitív robotika 
 ## Object Tracking házi feladat - 2024 tavasz
 
-![](NVIDIA_Overlay_W6DkVaR8zW.mp4)
+![](./media/NVIDIA_Overlay_W6DkVaR8zW.mp4)
 
 <!--https://github.com/HorvathBenedek/Kogrob_HW_Tracking/blob/main/media/NVIDIA_Overlay_W6DkVaR8zW.mp4-->
 
