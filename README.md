@@ -51,16 +51,6 @@ a `../kogrob_tracking/src` mappában találhatók.
 
 Ezek a programok párhuzamosan futnak; a `Controller` felelős a robot mozgatásáért, míg az `ImageProcessor` a
 YOLOv5 algoritmus segítségével dolgozza fel a kamerából bejövő jelet. 
-<!--A két szálat a `../kogrob_tracking/srv/Detection.srv` ROS szerver kapcsolja össze, ez tartalmazza a ROS
-node-ok közötti üzenetek formátumát. -->
-
-<!--A robot viselkedését két osztály határozza meg, a `Controller` illetve az `ImageProcessor`; ezek
-definíciója a megfelelő `controller.py` és `image_processor.py` fájlokban található, a 
-`../kogrob_tracking/src` mappában. 
-Ezek a programok párhuzamosan futnak; a `Controller` felelős a robot mozgatásáért, míg az `ImageProcessor` a
-YOLOv5 algoritmus segítségével dolgozza fel a kamerából bejövő jelet. A két szálat a 
-`../kogrob_tracking/srv/Detection.srv` ROS szerver kapcsolja össze, ez tartalmazza a ROS
-node-ok közötti üzenetek formátumát. -->
 
 ### A robot viselkedésének áttekintése
 
@@ -85,8 +75,9 @@ _Megjegyzés: A robot működését vezérlő kód bemutatásánál a lényegret
 ki. A kivágott kódrészletek helyét `##[...]` komment jelöli._
 
 A rospy node-ok és az osztályok inicializálása után a osztályt a `Controller.run()` függvénnyel indíthatjuk el 
-az osztályok együttes működését. Az  `ImageProcessor` osztálynak nincs `run()` függvénye, annak vezérlését a 
-`Controller` végzi. 
+az osztályok együttes működését. Az  `ImageProcessor` osztálynak nincs `run()` függvénye, helyette az `update_view()` 
+függvénye van, ami automatikusan hívódik amíg a `rospy` fut; feladata a kamera képének bekérése és eltárolása, 
+erről később lesz szó. 
 ```python
 ##controller.py
 if __name__ == "__main__":
@@ -102,8 +93,7 @@ if __name__ == "__main__":
     rospy.spin()
 ```
 
-A `Controller()` osztály működése:
-Inicializáló függvény:
+A `Controller()` osztály inicializáló függvénye:
 ```python
 class Controller:
     def __init__(self) -> None:
@@ -122,9 +112,7 @@ irányítjuk a robotot.
 
 A  `rospy.Service` és  `rospy.ServiceProxy` használatáról lejjebb lesz szó. 
 
-Az `ImageProcessor` osztály működése: 
-
-Inicializáló függvény:
+Az `ImageProcessor` osztály inicializáló függvénye:
 ```python
 class ImageProcessor:
     def __init__(self) -> None:
@@ -208,35 +196,90 @@ float64 image_width
 float64 image_height
 bool in_sight_of_robot
 ```
+Látható, hogy a bemenő paraméter a label, vagyik a keresett objektumkategória; míg a visszakapott értékek 
+a YOLOv5 által megtalált legideálisabb objektumnak, annak határoló téglalapjának paraméterei, illetve 
+egy logikai érték, ami azt mutatja, hogy talált-e a keresettnek megfelelő objektumot. 
 
-<!--néhány fontos különbséggel. 
-Egyrészt a `Publisher/Subscriber` node-ok folyamatosan küldenek és vesznek adatot, míg a `Service/ServiceProxy`
-node-ok esetén egy-egy üzenet érkezik csak. Ennél foa "vevő" - a `ServiceProxy` - kérése nyomán közvetít egy üzenetet a `Service`. -->
-<!--ez tulajdonképpen
-hasonló szerepet tölt be, mint egy publisher, annyi külöbséggel, hogy nem folyamatosan küld adatot,
-hanem hívásra (request) válaszol. A `Publisher/Subscriber` paradigma alkalmasabb folytonos adatfolyam
-közvetítésére, míg a `Service/ServiceProxy` paradigma ideális alkalmankénti, egyszeri üzenetek
-közvetítésére, mivel blokkoló módban működik. -->
+A programot összekötő elemek már ismertek, tekintsük át a tényleges algoritmus működését, elsősorban a 
+`Controller.run()`, az `ImageProcessor.human_detection()` és az `ImageProcessor.update_view()` 
+függvényekre tekintettel. 
 
-A `rospy.Service` üzenet `Detection` formátumát a fent említett `Detection.srv` ROS szerver határozza meg:
-```python
-string label
----
-float64 box_x
-float64 box_y
-float64 box_width
-float64 box_height
-float64 image_width
-float64 image_height
-bool in_sight_of_robot
-```
-Itt a vonal feletti rész a `ServiceProxy` irányából a `Service` felé menő request formátuma, míg a
-vonal alatti rész a `Service` által a `ServiceProxy` felé visszaküldött válaszé. 
-Az üzenet callback függvényeét a `human detection` függvény végzi:
+**`ImageProcessor.update_view()`:**
 
 ```python
 class ImageProcessor:
     ##[...]
+    def update_view(self):
+        try:
+            while not rospy.is_shutdown():
+                if len(self.image_msg.data) == 0:  # If there is no image data
+                    continue
+
+                # Convert binary image data to numpy array
+                self.image_np = np.frombuffer(self.image_msg.data, dtype=np.uint8)
+                self.image_np = self.image_np.reshape(self.image_res)
+
+                # Update results
+                self.results = self.model(self.image_np)
+
+                # Draw object bounding boxes on frame
+                frame = copy.deepcopy(self.image_np)
+                annotator = Annotator(frame)
+
+                for bbox in self.bounding_boxes:
+                    cls, x1, y1, x2, y2 = bbox
+                    color = (128, 128, 128)  # Gray color
+                    annotator.box_label([x1, y1, x2, y2], label=self.model.names[cls], color=color)
+
+                cv2.imshow("robot_view", cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
+                cv2.waitKey(1)
+
+        except rospy.exceptions.ROSInterruptException:
+            pass
+```
+Látható, hogy az `update_view()` feladata a kamera képének beolvasása, annak betáplálása a YOLOv5 neurális 
+hálóba - `self.model(self.image_np)`, majd a kép ábrázolása a neurális háló által visszatérített 
+hatázolónégyzetekkel és kategóriákkal együtt. 
+Gyakorlatban ez az alábbi módon néz ki. 
+
+SCREENSHOT!!!
+
+**`Controller.run()`**
+```
+class Controller:
+    ##[...]
+    def run(self) -> None:
+        try:
+            while not rospy.is_shutdown():
+                label = "person"
+                response = self.detection(label)
+
+                if response.in_sight_of_robot:
+                    self.find_errors(response)
+                    
+                    # Angular velocity control
+                    self.move.angular.z = self.angular_vel_coef * self.angular_error
+
+                    # Linear velocity control
+                    if self.distance_error < 0:
+                        self.move.linear.x = self.linear_vel_coef * abs(self.distance_error)  # Move backward if too close
+                    else:
+                        self.move.linear.x = -self.linear_vel_coef * self.distance_error  # Move forward if too far
+
+                    self.cmd_publisher.publish(self.move)
+                else:
+                    self.move.linear.x = 0  # Stop linear movement when target is lost
+                    self.move.angular.z = 0.3  # Rotate to search for the target
+                    self.cmd_publisher.publish(self.move)
+
+        except rospy.exceptions.ROSInterruptException:
+            pass
+```
+Ennek a függvénynek két fő funkciója van; egyrészt, mint az már említésre került, 
+
+**`ImageProcessor.human_detection()`**
+```python
+class ImageProcessor:
     def human_detection(self, req):
         self.bounding_boxes = []
         res = DetectionResponse()
