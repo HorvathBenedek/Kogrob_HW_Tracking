@@ -245,7 +245,7 @@ Gyakorlatban ez az alábbi módon néz ki.
 
 SCREENSHOT!!!
 ![alt text](./media/screenshot.png | width=100)
-
+![](./media/screenshot.png | width=100)
 **`Controller.run()`**
 ```
 class Controller:
