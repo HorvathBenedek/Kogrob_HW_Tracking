@@ -246,6 +246,8 @@ Gyakorlatban ez az alábbi módon néz ki.
 SCREENSHOT!!!
 ![alt text](./media/screenshot.png | width=100)
 ![](./media/screenshot.png | width=100)
+![img1](./media/screenshot.png)
+<img src="./media/screenshot.png" width="100">
 **`Controller.run()`**
 ```
 class Controller:
