@@ -291,8 +291,8 @@ logika alapján épül fel:
        Ha a becslés megvan, kivonjuk belőle a biztonságos minimum követési távolságot. 
     3. A távolság és a szöghiba ismeretében meghatározzuk az X irányú (előre mutató sebességet és a
        Z tengely menti (vízszintes síkú) forgási szögsebességet.
-           * Ha van célpont, ω<sub>Z</sub> és v<sub>X</sub> egy-egy P szabályzóval közelít a nyugalmi pont felé. 
-           * Ha nincs célpont, a sebesség 0, a robot forog és keres. 
+          * Ha van célpont, ω<sub>Z</sub> és v<sub>X</sub> egy-egy P szabályzóval közelít a nyugalmi pont felé. 
+          * Ha nincs célpont, a sebesség 0, a robot forog és keres. 
         
 
 **`ImageProcessor.human_detection()`**
