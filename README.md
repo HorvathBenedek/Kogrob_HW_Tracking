@@ -159,8 +159,38 @@ segítésével vesszük a kamera adatait.
 > másodlagos számítások lekérdezéséhez; szinkron jellegéből adódóan jobban ütemezhető hosszabb számítási igényű 
 > feladatok ellátására. 
 
-A mi megvalósításunkban a `Controller` a fent említett ```python rospy.ServiceProxy('detection', Detection)``` node segítségével 
-ad le igényt az `ImageProcessor`-ban található `rospy.Service('detection', Detection, self.human_detection)` számára, hogy szolgáltasson célpontot a kamera képének feldolgozása segítségével. A 
+A mi megvalósításunkban a `Controller` a fent említett `rospy.ServiceProxy('detection', Detection)` node segítségével 
+ad le igényt az `ImageProcessor`-ban található `rospy.Service('detection', Detection, self.human_detection)` számára,
+hogy szolgáltasson célpontot a kamera képének feldolgozása segítségével. 
+```python
+class Controller:
+    def __init__(self) -> None:
+        ##[...]
+        rospy.wait_for_service('detection')
+        self.detection = rospy.ServiceProxy('detection', Detection)
+        ##[...]
+
+    def run(self) -> None:
+        try:
+            while not rospy.is_shutdown():
+                label = "person"
+                response = self.detection(label)
+                ##[...]
+
+
+class ImageProcessor:
+    def __init__(self) -> None:
+        ##[...]
+        self.human_detection_server = rospy.Service('detection', Detection, self.human_detection)
+        ##[...]
+
+    def human_detection(self, req):
+        ##[...]
+        res = DetectionResponse()
+        ##[...]
+        return res
+```
+Látható, hogy 
 
 <!--néhány fontos különbséggel. 
 Egyrészt a `Publisher/Subscriber` node-ok folyamatosan küldenek és vesznek adatot, míg a `Service/ServiceProxy`
