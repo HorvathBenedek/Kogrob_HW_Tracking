@@ -50,9 +50,9 @@ a `../kogrob_tracking/src` mappában találhatók.
 
 
 Ezek a programok párhuzamosan futnak; a `Controller` felelős a robot mozgatásáért, míg az `ImageProcessor` a
-YOLOv5 algoritmus segítségével dolgozza fel a kamerából bejövő jelet. A két szálat a 
-`../kogrob_tracking/srv/Detection.srv` ROS szerver kapcsolja össze, ez tartalmazza a ROS
-node-ok közötti üzenetek formátumát. 
+YOLOv5 algoritmus segítségével dolgozza fel a kamerából bejövő jelet. 
+<!--A két szálat a `../kogrob_tracking/srv/Detection.srv` ROS szerver kapcsolja össze, ez tartalmazza a ROS
+node-ok közötti üzenetek formátumát. -->
 
 <!--A robot viselkedését két osztály határozza meg, a `Controller` illetve az `ImageProcessor`; ezek
 definíciója a megfelelő `controller.py` és `image_processor.py` fájlokban található, a 
@@ -138,7 +138,8 @@ class ImageProcessor:
         ##[...]
         self.update_view()
 ```
-**Itt a főbb lépések**
+
+**Itt a főbb lépések:**
 - létrehozunk egy subscriber-t `follower/camera/image` topichoz, ez veszi a robot kamerájának
 képét.
 - A kép feldolgozását a YOLO modell fogja végezni, amit a `self.model()` függvénnyel hívhatunk meg.
@@ -190,7 +191,23 @@ class ImageProcessor:
         ##[...]
         return res
 ```
-Látható, hogy 
+Itt a `Detection` paraméter a `../kogrob_tracking/srv/Detection.srv` ROS szerverben definiált üzenet-formátum, 
+a `self.human_detection` függvény pedig a service request lekezeléséért felelős függvény. Látható, hogy ennek
+visszatérési paramétere `DetectionResponse()` formátumú. A fent említett `Detection.srv` tartalmazza a beérkező üzenet
+és a visszaküldött válasz formátumát is, erre hivatkozik a `DetectionResponse()`. 
+
+```python
+##Detection.srv
+string label
+---
+float64 box_x
+float64 box_y
+float64 box_width
+float64 box_height
+float64 image_width
+float64 image_height
+bool in_sight_of_robot
+```
 
 <!--néhány fontos különbséggel. 
 Egyrészt a `Publisher/Subscriber` node-ok folyamatosan küldenek és vesznek adatot, míg a `Service/ServiceProxy`
