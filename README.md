@@ -13,8 +13,6 @@
 
 <video src="https://github.com/HorvathBenedek/Kogrob_HW_Tracking/tree/main/media/NVIDIA_Overlay_W6DkVaR8zW.mp4" width="800" />
 
-https://github.com/HorvathBenedek/Kogrob_HW_Tracking/tree/main/media
-
 ## A feladat leírása
 A választott feladatunk témája emberek vagy tárgyak felismerése és követése klasszikus
 vagy neurális hálós algoritmusos képfeldolgozás segítségével TurtleBot3 Burger roboton, 
