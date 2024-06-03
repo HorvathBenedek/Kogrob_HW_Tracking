@@ -352,8 +352,7 @@ A program ebben a formában kifejezetten emberi alakok detektálására van kié
 ### Környezet létrehozása
 A telepítés feltétele természetesen a ROS és Gazebo programok használata, amelyek valamilyen
 Linux operációs rendszerhez kötöttek. Mi a programot WSL segítségével Ubuntu 20.04 alatt futtattuk,
-tehát ezt javasoljuk használatra. 
-ROS NOETIC, GAZEBO INSTALL PARANCSOK BECOPYZVA IDE
+tehát ezt javasoljuk használatra. A ROS Noetic telepítéséhez részletes leírást találni [itt] (https://wiki.ros.org/noetic/Installation/Ubuntu)
 
 Továbbá szükségünk lesz az ultralytics csomagra a YOLO algoritmushoz, amit felhasználtunk 
 (egész pontosan YOLOv5). Ezt az alábbi paranccsal tudjuk telepíteni:
