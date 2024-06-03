@@ -292,8 +292,8 @@ logika alapján épül fel:
     3. A távolság és a szöghiba ismeretében meghatározzuk az X irányú (előre mutató sebességet és a
        Z tengely menti (vízszintes síkú) forgási szögsebességet.
           * Ha van célpont, ω<sub>Z</sub> és v<sub>X</sub> egy-egy P szabályzóval közelít a nyugalmi pont felé. 
-          * Ha nincs célpont, a sebesség 0, a robot forog és keres. 
-        
+          * Ha nincs célpont, a sebesség 0, a robot forog és keres.
+
 
 **`ImageProcessor.human_detection()`**
 ```python
@@ -329,14 +329,12 @@ class ImageProcessor:
             # If no person is detected, return response indicating not in sight
             return DetectionResponse(in_sight_of_robot=False)
 ```
-
+Itt lényegében az `update_view()` által feljegyzett detektálási eredmények közül kiválasztjuk az 
+elvárt kategóriának megfelelőt. Ha pedig nem találtunk megfelelőt, az `in_sight_of_robot` logikai értéket `False`-ra
+állítjuk. 
+Említésre érdemes, hogy jól látszanak a `DetectionResponse()` formátum elemei - `box_x, box_y, box_width`, stb. 
 A program ebben a formában kifejezetten emberi alakok detektálására van kiélezve, ezt természetesen 
 át lehet írni bármely a YOLOv5 által detektálni képes kategóriára minimális erőbefektetéssel.
-
-
-továbbá létrehozunk egy `ServiceProxy`-t - ez hasonló a subscriberhez, annyi különbséggel, hogy 
-
-
 
 ## Telepítés
 
