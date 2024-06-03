@@ -9,7 +9,7 @@
   <source src="./media/NVIDIA_Overlay_W6DkVaR8zW.mp4" type="video/mp4">
 </video>
 
-<video src="https://github.com/HorvathBenedek/Kogrob_HW_Tracking/blob/main/media/NVIDIA_Overlay_W6DkVaR8zW.mp4" width="800" />
+<video src="https://github.com/HorvathBenedek/Kogrob_HW_Tracking/blob/main/media/NVIDIA_Overlay_W6DkVaR8zW.mp4" width="800" >
 
 https://github.com/HorvathBenedek/Kogrob_HW_Tracking/blob/main/media/NVIDIA_Overlay_W6DkVaR8zW.mp4
 
