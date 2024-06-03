@@ -16,10 +16,13 @@
 ## Tartalomjegyzék
 1. [A feladat leírása](#A-feladat-leírása)  
 2. [Megvalósítás](#Megvalósítás)
+
    I [A Gazebo szimuláció felépítése](#A-Gazebo-szimuláció-felépítése)
   II [A robot viselkedésének áttekintése](#A-robot-viselkedésének-áttekintése)
   III [A kód magyarázata](#A-kód-magyarázata)
+
 3. [Telepítés](#Telepítés)
+ 
   I [Környezet létrehozása](#Környezet-létrehozása)
   II [A repo klónozása](#A-repo-klónozása)
 
