@@ -147,8 +147,8 @@ képét.
 - végül pedig frissítjük a képet a `self.update_view()` függvénnyel; itt egy `rospy.Sunscriber`
 segítésével vesszük a kamera adatait. 
 
-> [!TIP]
 > **A `rospy.Service()` és `rospy.ServiceProxy()` paradigma magyarázata:**
+>
 > Lényegében a `Service/ServiceProxy` pár ugyanazt a feladatot tölti be, mint a `Publisher/Subscriber` 
 > pár, de megvalósításban és felhasználási területben eltérnek. 
 > A `Publisher/Subscriber` node-ok folyamatosan küldenek és vesznek adatot, míg a `Service/ServiceProxy`
@@ -159,14 +159,17 @@ segítésével vesszük a kamera adatait.
 > másodlagos számítások lekérdezéséhez; szinkron jellegéből adódóan jobban ütemezhető hosszabb számítási igényű 
 > feladatok ellátására. 
 
-néhány fontos különbséggel. 
+A mi megvalósításunkban a `Controller` a fent említett 
+
+<!--néhány fontos különbséggel. 
 Egyrészt a `Publisher/Subscriber` node-ok folyamatosan küldenek és vesznek adatot, míg a `Service/ServiceProxy`
-node-ok esetén egy-egy üzenet érkezik csak. Ennél foa "vevő" - a `ServiceProxy` - kérése nyomán közvetít egy üzenetet a `Service`. 
+node-ok esetén egy-egy üzenet érkezik csak. Ennél foa "vevő" - a `ServiceProxy` - kérése nyomán közvetít egy üzenetet a `Service`. -->
 <!--ez tulajdonképpen
 hasonló szerepet tölt be, mint egy publisher, annyi külöbséggel, hogy nem folyamatosan küld adatot,
 hanem hívásra (request) válaszol. A `Publisher/Subscriber` paradigma alkalmasabb folytonos adatfolyam
 közvetítésére, míg a `Service/ServiceProxy` paradigma ideális alkalmankénti, egyszeri üzenetek
 közvetítésére, mivel blokkoló módban működik. -->
+
 A `rospy.Service` üzenet `Detection` formátumát a fent említett `Detection.srv` ROS szerver határozza meg:
 ```python
 string label
