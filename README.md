@@ -5,7 +5,7 @@
 
 ![](./media/NVIDIA_Overlay_W6DkVaR8zW.mp4)
 
-<a href="(https://youtu.be/CGorUKJagtU)">"
+<a href="(https://youtu.be/CGorUKJagtU)">
 
 <video src="https://youtu.be/CGorUKJagtU" width="300" />
 
