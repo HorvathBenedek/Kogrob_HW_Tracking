@@ -16,12 +16,12 @@
 ## Tartalomjegyzék
 1. [A feladat leírása](#A-feladat-leírása)  
 2. [Megvalósítás](#Megvalósítás)
-   2.1 [A Gazebo szimuláció felépítése](#A-Gazebo-szimuláció-felépítése)
-   2.2 [A robot viselkedésének áttekintése](#A-robot-viselkedésének-áttekintése)
-   2.3 [A kód magyarázata](#A-kód-magyarázata)
-4. [Telepítés](#Telepítés)
-   3.1 [Környezet létrehozása](#Környezet-létrehozása)
-   3.2 [A repo klónozása](#A-repo-klónozása)
+2.1 [A Gazebo szimuláció felépítése](#A-Gazebo-szimuláció-felépítése)
+2.2 [A robot viselkedésének áttekintése](#A-robot-viselkedésének-áttekintése)
+2.3 [A kód magyarázata](#A-kód-magyarázata)
+3. [Telepítés](#Telepítés)
+3.1 [Környezet létrehozása](#Környezet-létrehozása)
+3.2 [A repo klónozása](#A-repo-klónozása)
 
 ## A feladat leírása
 A választott feladatunk témája emberek vagy tárgyak felismerése és követése klasszikus
